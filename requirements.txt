@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+google-genai
+qdrant-client
+python-multipart
+openai-whisper
+python-dotenv
+ffmpeg-python
+sounddevice
+numpy
