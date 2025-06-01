@@ -5,6 +5,7 @@ from app.utils import build_prompt
 import tempfile
 import shutil
 from app.qdrant_client import QdrantManager
+from fastapi.middleware.cors import CORSMiddleware
 
 
 from dotenv import load_dotenv
@@ -15,6 +16,31 @@ app = FastAPI()
 qdrant = QdrantManager()
 gemini_client = GeminiClient()
 model = whisper.load_model("base")
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or ["http://localhost:3000"] for tighter security
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get('/get-stories')
+async def get_stories():
+    try:
+        result, _ = qdrant.get_all()
+        stories = [
+            {
+                "id": point.id,
+                "requirement": point.payload.get("requirement"),
+                "user_story": point.payload.get("user_story"),
+            }
+            for point in result
+        ]
+        return stories
+    except Exception as e:
+        return
 
 @app.post("/generate-story")
 async def generate_story(requirement: str = Form(...)):

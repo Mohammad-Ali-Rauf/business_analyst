@@ -34,6 +34,9 @@ class QdrantManager:
         )
         self.client.upsert(collection_name=COLLECTION_NAME, points=[point])
         print("📥 Saved to Qdrant!")
+    
+    def get_all(self):
+        return self.client.scroll(collection_name=COLLECTION_NAME, scroll_filter=None, limit=999999999999)
 
     def query_similar_stories(self, embedding: list[float], top_k=3) -> list[dict]:
         results = self.client.search(
