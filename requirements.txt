@@ -8,3 +8,6 @@ python-dotenv
 ffmpeg-python
 sounddevice
 numpy
+langchain
+langchain-core
+langchain-community
